@@ -21,7 +21,7 @@ func InitLogger(filePath string, logLevel string) (*zap.Logger, error) {
 		ConsoleSeparator: " - ",
 	}
 
-	var atomicLevel zap.AtomicLevel
+	atomicLevel := zap.NewAtomicLevel()
 
 	switch {
 	case logLevel == "debug":
