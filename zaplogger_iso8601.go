@@ -35,7 +35,6 @@ func InitLogger(filePath string, logLevel string) (*zap.Logger, error) {
 	}
 
 	logConfig := zap.Config{
-		//Level:            zap.NewAtomicLevelAt(zap.DebugLevel),
 		Level:            atomicLevel,
 		Development:      false,
 		Encoding:         "console",
