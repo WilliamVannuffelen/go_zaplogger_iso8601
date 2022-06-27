@@ -13,6 +13,7 @@ func InitLogger(filePath string, logLevel string) (*zap.Logger, error) {
 		TimeKey:          "time",
 		NameKey:          "logger",
 		CallerKey:        "caller",
+		FunctionKey:      "function",
 		StacktraceKey:    "stacktrace",
 		LineEnding:       zapcore.DefaultLineEnding,
 		EncodeLevel:      zapcore.CapitalLevelEncoder,
