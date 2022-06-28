@@ -6,7 +6,7 @@ Timestamps are in the only valid format and with unstructured output to stdout/s
 
 # Usage
 
-## Edit go.mod
+## Edit go.mod of your package
 ```
 go mod edit -replace zaplogger_iso8601=github.com/williamvannuffelen/go_zaplogger_iso8601@v0.1.2
 ```
