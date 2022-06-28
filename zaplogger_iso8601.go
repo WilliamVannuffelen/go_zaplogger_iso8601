@@ -5,7 +5,7 @@ import (
 	zapcore "go.uber.org/zap/zapcore"
 )
 
-func InitLogger(filePath string, logLevel string) (*zap.Logger, error) {
+func InitLogger(filePath string, logLevel string) (*zap.Logger) {
 
 	encoderConfig := zapcore.EncoderConfig{
 		MessageKey:       "msg",
@@ -51,5 +51,5 @@ func InitLogger(filePath string, logLevel string) (*zap.Logger, error) {
 	defer logger.Sync()
 	logger.Info("Logger init successful.")
 
-	return logger, err
+	return logger
 }
