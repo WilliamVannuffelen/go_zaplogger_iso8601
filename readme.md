@@ -88,7 +88,7 @@ main.main()
         /Users/me/devel/go/example/example.go:11 +0x38
 exit status 2
 ```
-Logger warns when provided an invalid logLevel
+Logger warns when provided an invalid logLevel and defaults to 'info'.
 ```
 2022-06-28T22:17:47.050+0200 - INFO - go_zaplogger_iso8601@v0.1.2/zaplogger_iso8601.go:56 - zaplogger_iso8601.InitLogger - Logger init successful.
 2022-06-28T22:17:47.051+0200 - WARN - go_zaplogger_iso8601@v0.1.2/zaplogger_iso8601.go:59 - zaplogger_iso8601.InitLogger - Invalid value provided for logLevel. Valid values are: 'debug', 'info', 'warn', 'error'.
