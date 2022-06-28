@@ -23,6 +23,7 @@ func InitLogger(filePath string, logLevel string) (*zap.Logger) {
 	}
 
 	atomicLevel := zap.NewAtomicLevel()
+	warnInvalidLevel := false
 
 	switch {
 	case logLevel == "debug":
@@ -33,8 +34,10 @@ func InitLogger(filePath string, logLevel string) (*zap.Logger) {
 		atomicLevel.SetLevel(zap.WarnLevel)
 	case logLevel == "error":
 		atomicLevel.SetLevel(zap.ErrorLevel)
+	default:
+		warnInvalidLevel = true
+		atomicLevel.SetLevel(zap.InfoLevel)
 	}
-
 	logConfig := zap.Config{
 		Level:            atomicLevel,
 		Development:      false,
@@ -49,7 +52,12 @@ func InitLogger(filePath string, logLevel string) (*zap.Logger) {
 		panic(err)
 	}
 	defer logger.Sync()
+	
 	logger.Info("Logger init successful.")
+	
+	if warnInvalidLevel {
+		logger.Warn("Invalid value provided for logLevel. Valid values are: 'debug', 'info', 'warn', 'error'.")
+	}
 
 	return logger
 }
