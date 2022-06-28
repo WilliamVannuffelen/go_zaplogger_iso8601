@@ -23,7 +23,7 @@ Example:
 package main
 
 import (
-	logger "zaplogger_iso8601"
+  logger "zaplogger_iso8601"
 )
 
 func main() {
