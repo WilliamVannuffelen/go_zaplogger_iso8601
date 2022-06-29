@@ -1,4 +1,4 @@
-module zaplogger_iso8601
+module go_zaplogger_iso8601
 
 go 1.18
 

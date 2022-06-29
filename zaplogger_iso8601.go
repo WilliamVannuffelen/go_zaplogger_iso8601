@@ -1,4 +1,4 @@
-package zaplogger_iso8601
+package go_zaplogger_iso8601
 
 import (
 	zap "go.uber.org/zap"
