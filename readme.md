@@ -1,4 +1,4 @@
-# zaplogger_iso8601
+# go_zaplogger_iso8601
 
 A simple wrapper package around [go.uber.org/zap](go.uber.org/zap).
 
@@ -6,14 +6,10 @@ Timestamps are in the only valid format and with unstructured output to stdout/s
 
 # Usage
 
-## Edit go.mod of your package
-```
-go mod edit -replace zaplogger_iso8601=github.com/williamvannuffelen/go_zaplogger_iso8601@v0.1.2
-```
 ## Init logger by calling:
 
 ```go
-func InitLogger(filePath string, logLevel string)
+func InitLogger(filePath string, logLevel string) *zap.Logger
 // valid log levels are 'debug', 'info', 'warn', 'error'
 ```
 
@@ -23,7 +19,7 @@ Example:
 package main
 
 import (
-  logger "zaplogger_iso8601"
+  logger "github.com/williamvannuffelen/go_zaplogger_iso8601"
 )
 
 func main() {
