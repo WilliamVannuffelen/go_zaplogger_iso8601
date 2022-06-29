@@ -31,7 +31,7 @@ func main() {
 ```
 Results in:
 ```
-2022-06-28T22:49:42.426+0200 - INFO - go_zaplogger_iso8601@v0.1.2/zaplogger_iso8601.go:56 - zaplogger_iso8601.InitLogger - Logger init successful.
+2022-06-28T22:49:42.426+0200 - INFO - go_zaplogger_iso8601@v0.1.2/zaplogger_iso8601.go:56 - github.com/williamvannuffelen/go_zaplogger_iso8601.InitLogger - Logger init successful.
 2022-06-28T22:49:42.446+0200 - INFO - test/test.go:10 - main.main - Foo!
 2022-06-28T22:49:42.446+0200 - WARN - test/test.go:11 - main.main - Bar!
 ```
@@ -42,7 +42,7 @@ Logger can be passed to other packages if they import zap.
 package main
 
 import (
-  logger "zaplogger_iso8601"
+  logger "github.com/williamvannuffelen/go_zaplogger_iso8601"
 )
 
 func main() {
@@ -66,7 +66,7 @@ func Example(logger *zap.Logger, example string) {
 ```
 Results in 
 ```
-2022-06-28T22:29:56.183+0200 - INFO - go_zaplogger_iso8601@v0.1.2/zaplogger_iso8601.go:56 - zaplogger_iso8601.InitLogger - Logger init successful.
+2022-06-28T22:29:56.183+0200 - INFO - go_zaplogger_iso8601@v0.1.2/zaplogger_iso8601.go:56 - github.com/williamvannuffelen/go_zaplogger_iso8601.InitLogger - Logger init successful.
 2022-06-28T22:29:56.202+0200 - INFO - childpackage/childpackage.go:10 - childpackage/childpackage.Example - This is an example.
 
 ```
@@ -86,6 +86,6 @@ exit status 2
 ```
 Logger warns when provided an invalid logLevel and defaults to 'info'.
 ```
-2022-06-28T22:17:47.050+0200 - INFO - go_zaplogger_iso8601@v0.1.2/zaplogger_iso8601.go:56 - zaplogger_iso8601.InitLogger - Logger init successful.
-2022-06-28T22:17:47.051+0200 - WARN - go_zaplogger_iso8601@v0.1.2/zaplogger_iso8601.go:59 - zaplogger_iso8601.InitLogger - Invalid value provided for logLevel. Valid values are: 'debug', 'info', 'warn', 'error'.
+2022-06-28T22:17:47.050+0200 - INFO - go_zaplogger_iso8601@v0.1.2/zaplogger_iso8601.go:56 - github.com/williamvannuffelen/go_zaplogger_iso8601.InitLogger - Logger init successful.
+2022-06-28T22:17:47.051+0200 - WARN - go_zaplogger_iso8601@v0.1.2/zaplogger_iso8601.go:59 - github.com/williamvannuffelen/go_zaplogger_iso8601.InitLogger - Invalid value provided for logLevel. Valid values are: 'debug', 'info', 'warn', 'error'.
 ```
