@@ -2,14 +2,25 @@
 
 A simple wrapper package around [go.uber.org/zap](go.uber.org/zap).
 
-Timestamps are in the only valid format and with unstructured output to stdout/stderr and a log file of choice.
+Limited zapLogger API exposure through an interface. Intended for targeted use with CLI applications.
+
+- Timestamps in ISO8601 format. 
+- Writes unstructured human-readable output to stdout/stderr and a file of choice.
+- Only exposes Debug(), Info(), Warn(), Error(), Panic() and Fatal() methods.
 
 # Usage
+
+## Preconfigured zap.SugaredLogger gets exposed via an interface:
+
+```go
+type Logger interface{ ... }
+```
+
 
 ## Init logger by calling:
 
 ```go
-func InitLogger(filePath string, logLevel string) *zap.Logger
+func InitLogger(filePath string, logLevel string) (Logger, bool)
 // valid log levels are 'debug', 'info', 'warn', 'error'
 ```
 
@@ -23,7 +34,7 @@ import (
 )
 
 func main() {
-  log := logger.InitLogger("log.txt", "debug")
+  log, invalidLevel := logger.InitLogger("log.txt", "debug")
 
   log.Info("Foo!")
   log.Warn("Bar!")
@@ -46,9 +57,14 @@ import (
 )
 
 func main() {
-  log := logger.InitLogger("log.txt", "debug")
+  log, err := logger.InitLogger("log.txt", "debug")
+	if err != nil {
+		log.Warn(err)
+	}
+	log.Info("Logger initialized successfully.")  
 
-  childpackage.Example(log, "example")
+  // pass the interface as an explicit dependency
+  childpackage.ShowExample(log, "example")
 }
 
 //##################
@@ -57,17 +73,17 @@ package childpackage
 
 import (
   "fmt"
-  zap "go.uber.org/zap"
+  logger "github.com/williamvannuffelen/go_zaplogger_iso8601"
 )
 
-func Example(logger *zap.Logger, example string) {
+func ShowExample(log logger.Logger, example string) {
   log.Info(fmt.Sprintf("This is an %s.", example))
 }
 ```
 Results in 
 ```
-2022-06-28T22:29:56.183+0200 - INFO - go_zaplogger_iso8601@v0.1.2/zaplogger_iso8601.go:56 - github.com/williamvannuffelen/go_zaplogger_iso8601.InitLogger - Logger init successful.
-2022-06-28T22:29:56.202+0200 - INFO - childpackage/childpackage.go:10 - childpackage/childpackage.Example - This is an example.
+2022-06-28T22:29:56.183+0200 - INFO - main/main.go:10 - main.main - Logger initialized successfully.
+2022-06-28T22:29:56.202+0200 - INFO - childpackage/childpackage.go:10 - childpackage/childpackage.ShowExample - This is an example.
 
 ```
 
@@ -84,8 +100,7 @@ main.main()
         /Users/me/devel/go/example/example.go:11 +0x38
 exit status 2
 ```
-Logger warns when provided an invalid logLevel and defaults to 'info'.
+Logger returns an error object when provided with an invalid logLevel and defaults to 'info'.
 ```
-2022-06-28T22:17:47.050+0200 - INFO - go_zaplogger_iso8601@v0.1.2/zaplogger_iso8601.go:56 - github.com/williamvannuffelen/go_zaplogger_iso8601.InitLogger - Logger init successful.
-2022-06-28T22:17:47.051+0200 - WARN - go_zaplogger_iso8601@v0.1.2/zaplogger_iso8601.go:59 - github.com/williamvannuffelen/go_zaplogger_iso8601.InitLogger - Invalid value provided for logLevel. Valid values are: 'debug', 'info', 'warn', 'error'.
+2022-06-28T22:17:47.050+0200 - INFO - main/main.go:10 - main.main - invalid value provided for logLevel. Defaulting to 'info'
 ```
