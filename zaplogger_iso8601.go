@@ -5,7 +5,23 @@ import (
 	zapcore "go.uber.org/zap/zapcore"
 )
 
-func InitLogger(filePath string, logLevel string) (*zap.Logger) {
+type zapLogger struct {
+	sugaredLogger *zap.SugaredLogger
+}
+
+type myZapLogger struct {
+	myLogger *zap.SugaredLogger
+}
+
+func InitZapLogger(logger *zap.Logger) (Logger, error) {
+	sugaredLogger := logger.WithOptions(zap.AddCallerSkip(1)).Sugar()
+
+	return &zapLogger{
+		sugaredLogger: sugaredLogger,
+	}, nil
+}
+
+func InitLogger(filePath string, logLevel string) Logger {
 
 	encoderConfig := zapcore.EncoderConfig{
 		MessageKey:       "msg",
@@ -47,17 +63,87 @@ func InitLogger(filePath string, logLevel string) (*zap.Logger) {
 		ErrorOutputPaths: []string{"stderr", filePath},
 	}
 
-	logger, err := logConfig.Build()
+	initialLogger, err := logConfig.Build()
 	if err != nil {
 		panic(err)
 	}
+
+	logger := initialLogger.Sugar()
 	defer logger.Sync()
-	
+
 	logger.Info("Logger init successful.")
-	
+
 	if warnInvalidLevel {
 		logger.Warn("Invalid value provided for logLevel. Valid values are: 'debug', 'info', 'warn', 'error'.")
 	}
 
-	return logger
+	//return logger
+	return &myZapLogger{
+		myLogger: logger,
+	}
+}
+
+
+
+var logger Logger
+
+type Logger interface {
+	Debug(args ...interface{})
+
+	Info(args ...interface{})
+
+	Warn(args ...interface{})
+
+	Error(args ...interface{})
+
+	Panic(args ...interface{})
+
+	Fatal(args ...interface{})
+}
+
+func (l *zapLogger) Debug(args ...interface{}) {
+	l.sugaredLogger.Debug(args...)
+}
+
+func (l *zapLogger) Info(args ...interface{}) {
+	l.sugaredLogger.Info(args...)
+}
+
+func (l *zapLogger) Warn(args ...interface{}) {
+	l.sugaredLogger.Warn(args...)
+}
+func (l *zapLogger) Error(args ...interface{}) {
+	l.sugaredLogger.Error(args...)
+}
+
+func (l *zapLogger) Panic(args ...interface{}) {
+	l.sugaredLogger.Panic(args...)
+}
+
+func (l *zapLogger) Fatal(args ...interface{}) {
+	l.sugaredLogger.Fatal(args...)
+}
+
+
+func (l *myZapLogger) Debug(args ...interface{}) {
+	l.myLogger.Debug(args...)
+}
+
+func (l *myZapLogger) Info(args ...interface{}) {
+	l.myLogger.Info(args...)
+}
+
+func (l *myZapLogger) Warn(args ...interface{}) {
+	l.myLogger.Warn(args...)
+}
+func (l *myZapLogger) Error(args ...interface{}) {
+	l.myLogger.Error(args...)
+}
+
+func (l *myZapLogger) Panic(args ...interface{}) {
+	l.myLogger.Panic(args...)
+}
+
+func (l myZapLogger) Fatal(args ...interface{}) {
+	l.myLogger.Fatal(args...)
 }
