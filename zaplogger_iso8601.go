@@ -21,30 +21,30 @@ type Logger interface {
 	Fatal(args ...interface{})
 }
 
-type ZapLogger struct {
+type zapLogger struct {
 	sugaredLogger *zap.SugaredLogger
 }
 
-func (l *ZapLogger) Debug(args ...interface{}) {
+func (l *zapLogger) Debug(args ...interface{}) {
 	l.sugaredLogger.Debug(args...)
 }
 
-func (l *ZapLogger) Info(args ...interface{}) {
+func (l *zapLogger) Info(args ...interface{}) {
 	l.sugaredLogger.Info(args...)
 }
 
-func (l *ZapLogger) Warn(args ...interface{}) {
+func (l *zapLogger) Warn(args ...interface{}) {
 	l.sugaredLogger.Warn(args...)
 }
-func (l *ZapLogger) Error(args ...interface{}) {
+func (l *zapLogger) Error(args ...interface{}) {
 	l.sugaredLogger.Error(args...)
 }
 
-func (l *ZapLogger) Panic(args ...interface{}) {
+func (l *zapLogger) Panic(args ...interface{}) {
 	l.sugaredLogger.Panic(args...)
 }
 
-func (l *ZapLogger) Fatal(args ...interface{}) {
+func (l *zapLogger) Fatal(args ...interface{}) {
 	l.sugaredLogger.Fatal(args...)
 }
 
@@ -99,7 +99,7 @@ func InitLogger(filePath string, logLevel string) (Logger, bool) {
 	logger := initialLogger.Sugar()
 	defer logger.Sync()
 
-	return &ZapLogger{
+	return &zapLogger{
 		sugaredLogger: logger,
 	},
 	warnInvalidLevel
