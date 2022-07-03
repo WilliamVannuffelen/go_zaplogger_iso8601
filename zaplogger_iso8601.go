@@ -5,13 +5,51 @@ import (
 	zapcore "go.uber.org/zap/zapcore"
 )
 
+var logger Logger
+
+type Logger interface {
+	Debug(args ...interface{})
+
+	Info(args ...interface{})
+
+	Warn(args ...interface{})
+
+	Error(args ...interface{})
+
+	Panic(args ...interface{})
+
+	Fatal(args ...interface{})
+}
+
 type ZapLogger struct {
 	sugaredLogger *zap.SugaredLogger
 }
 
-var logger Logger
+func (l *ZapLogger) Debug(args ...interface{}) {
+	l.sugaredLogger.Debug(args...)
+}
 
-func InitLogger(filePath string, logLevel string) Logger {
+func (l *ZapLogger) Info(args ...interface{}) {
+	l.sugaredLogger.Info(args...)
+}
+
+func (l *ZapLogger) Warn(args ...interface{}) {
+	l.sugaredLogger.Warn(args...)
+}
+func (l *ZapLogger) Error(args ...interface{}) {
+	l.sugaredLogger.Error(args...)
+}
+
+func (l *ZapLogger) Panic(args ...interface{}) {
+	l.sugaredLogger.Panic(args...)
+}
+
+func (l *ZapLogger) Fatal(args ...interface{}) {
+	l.sugaredLogger.Fatal(args...)
+}
+
+
+func InitLogger(filePath string, logLevel string) (Logger, bool) {
 
 	encoderConfig := zapcore.EncoderConfig{
 		MessageKey:       "msg",
@@ -61,50 +99,9 @@ func InitLogger(filePath string, logLevel string) Logger {
 	logger := initialLogger.Sugar()
 	defer logger.Sync()
 
-	logger.Info("Logger init successful.")
-
-	if warnInvalidLevel {
-		logger.Warn("Invalid value provided for logLevel. Valid values are: 'debug', 'info', 'warn', 'error'.")
-	}
-
 	return &ZapLogger{
 		sugaredLogger: logger,
-	}
+	},
+	warnInvalidLevel
 }
 
-type Logger interface {
-	Debug(args ...interface{})
-
-	Info(args ...interface{})
-
-	Warn(args ...interface{})
-
-	Error(args ...interface{})
-
-	Panic(args ...interface{})
-
-	Fatal(args ...interface{})
-}
-
-func (l *ZapLogger) Debug(args ...interface{}) {
-	l.sugaredLogger.Debug(args...)
-}
-
-func (l *ZapLogger) Info(args ...interface{}) {
-	l.sugaredLogger.Info(args...)
-}
-
-func (l *ZapLogger) Warn(args ...interface{}) {
-	l.sugaredLogger.Warn(args...)
-}
-func (l *ZapLogger) Error(args ...interface{}) {
-	l.sugaredLogger.Error(args...)
-}
-
-func (l *ZapLogger) Panic(args ...interface{}) {
-	l.sugaredLogger.Panic(args...)
-}
-
-func (l *ZapLogger) Fatal(args ...interface{}) {
-	l.sugaredLogger.Fatal(args...)
-}
