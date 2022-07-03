@@ -34,20 +34,19 @@ import (
 )
 
 func main() {
-  log, invalidLevel := logger.InitLogger("log.txt", "debug")
-
-  log.Info("Foo!")
-  log.Warn("Bar!")
+  log, err := logger.InitLogger("log.txt", "debug")
+	if err != nil {
+		log.Warn(err)
+	}
+  log.Info("Logger initialized successfully.") 
 }
 ```
 Results in:
 ```
-2022-06-28T22:49:42.426+0200 - INFO - go_zaplogger_iso8601@v0.1.2/zaplogger_iso8601.go:56 - github.com/williamvannuffelen/go_zaplogger_iso8601.InitLogger - Logger init successful.
-2022-06-28T22:49:42.446+0200 - INFO - test/test.go:10 - main.main - Foo!
-2022-06-28T22:49:42.446+0200 - WARN - test/test.go:11 - main.main - Bar!
+2022-06-28T22:49:42.446+0200 - INFO - test/test.go:10 - main.main - Logger initialized successfully.
 ```
 
-Logger can be passed to other packages if they import zap.
+## Logger can be passed to other packages:
 
 ```go
 package main
