@@ -20,7 +20,7 @@ type Logger interface{ ... }
 ## Init logger by calling:
 
 ```go
-func InitLogger(filePath string, logLevel string) (Logger, bool)
+func InitLogger(filePath string, logLevel string) (Logger, error)
 // valid log levels are 'debug', 'info', 'warn', 'error'
 ```
 
