@@ -3,6 +3,7 @@ package go_zaplogger_iso8601
 import (
 	zap "go.uber.org/zap"
 	zapcore "go.uber.org/zap/zapcore"
+	"errors"
 )
 
 var logger Logger
@@ -49,7 +50,7 @@ func (l *zapLogger) Fatal(args ...interface{}) {
 }
 
 
-func InitLogger(filePath string, logLevel string) (Logger, bool) {
+func InitLogger(filePath string, logLevel string) (Logger, error) {
 
 	encoderConfig := zapcore.EncoderConfig{
 		MessageKey:       "msg",
@@ -96,12 +97,17 @@ func InitLogger(filePath string, logLevel string) (Logger, bool) {
 		panic(err)
 	}
 
+	var invalidLevelErr error
+	if warnInvalidLevel {
+		invalidLevelErr = errors.New("invalid value provided for logLevel. Defaulting to 'info'")
+	}
+
 	logger := initialLogger.Sugar()
 	defer logger.Sync()
 
 	return &zapLogger{
 		sugaredLogger: logger,
 	},
-	warnInvalidLevel
+	invalidLevelErr
 }
 
