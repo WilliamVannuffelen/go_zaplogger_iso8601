@@ -5,7 +5,6 @@ import (
 	zapcore "go.uber.org/zap/zapcore"
 	"errors"
 	"strings"
-	"fmt"
 )
 
 var logger Logger
@@ -51,12 +50,12 @@ func (l *zapLogger) Fatal(args ...interface{}) {
 	l.sugaredLogger.Fatal(args...)
 }
 
-func customCallerEncoder(caller zapcore.EntryCaller, enc zapcore.PrimitiveArrayEncoder) {
-	if strings.HasPrefix(caller.Function, "github.com") {
-		parts := strings.Split(caller.Function, "/")
-		functionName := parts[len(parts)-1]
-		enc.AppendString(fmt.Sprintf("%s:%d - %s", caller.TrimmedPath(), caller.Line, functionName))
+func CustomCallerEncoder(caller zapcore.EntryCaller, enc zapcore.PrimitiveArrayEncoder) {
+	functionName := caller.Function
+	if idx := strings.LastIndex(functionName, "/"); idx != -1 {
+			functionName = functionName[idx+1:]
 	}
+	enc.AppendString(caller.TrimmedPath() + " - " + functionName)
 }
 
 
@@ -68,12 +67,11 @@ func InitLogger(filePath string, logLevel string) (Logger, error) {
 		TimeKey:          "time",
 		NameKey:          "logger",
 		CallerKey:        "caller",
-		FunctionKey:      "function",
 		StacktraceKey:    "stacktrace",
 		LineEnding:       zapcore.DefaultLineEnding,
 		EncodeLevel:      zapcore.CapitalLevelEncoder,
 		EncodeTime:       zapcore.ISO8601TimeEncoder,
-		EncodeCaller:     customCallerEncoder,
+		EncodeCaller:     CustomCallerEncoder,
 		ConsoleSeparator: " - ",
 	}
 
